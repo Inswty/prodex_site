@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-banner">
+    <img src="{{ url_for('static', filename='image/' ~ site.main_image) }}">
+</div>
+<div class="breadcrumb">
+    Главная > Продукция
+</div>
+
+{% for category in categories %}
+    <h2 class="category-title">{{ category.name }}</h2>
+    <div class="products-list">
+        {% for product in category.products %}
+            <div class="product-item">
+                {% if product.thumbnail %}
+                    <img src="{{ url_for('static', filename='image/' ~ product.thumbnail) }}" alt="{{ product.name }}">
+                {% endif %}
+                <div class="product-info">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                    <p>{{ product.short_description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ site.company_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <h1>{{ site.company_name }}</h1>
+            <div class="contacts">
+                {% if site.phone %}
+                    <a href="tel:{{ site.phone }}">{{ site.phone }}</a>
+                {% endif %}
+                {% if site.email %}
+                    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+                {% endif %}
+            </div>
+        </div>
+        <nav>
+            <a href="{{ url_for('index') }}">Главная</a>
+            <a href="{{ url_for('products') }}">Продукция</a>
+            <a href="{{ url_for('about') }}">О нас</a>
+            <a href="{{ url_for('contacts') }}">Контакты</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

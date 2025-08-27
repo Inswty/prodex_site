@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-banner">
+    <img src="{{ url_for('static', filename='image/' ~ site.main_image) }}">
+</div>
+<div class="container header-container">
+    <div class="contacts">
+        <ul class="contact-list">
+            {% if site.phone %}
+                <li class="contact-item">
+                    <a href="tel:{{ site.phone }}">{{ site.phone }}</a>
+                </li>
+            {% endif %}
+            {% if site.email %}
+                <li class="contact-item">
+                    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+                </li>
+            {% endif %}
+            {% if site.address %}
+                <li class="contact-item">
+                    <span>{{ site.address }}</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

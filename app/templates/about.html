@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-banner">
+    <img src="{{ url_for('static', filename='image/' ~ site.main_image) }}">
+</div>
+<div class="container header-container">
+    <div class="about-text">
+        {{ site.about | safe }}
+    </div>
+</div>
+{% endblock %}

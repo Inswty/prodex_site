@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-banner">
+    <img src="{{ url_for('static', filename='image/' ~ product.header_image) }}">
+</div>
+
+<div class="main-text">
+    {{ product.description | safe }}
+</div>
+
+<div class="btn-container">
+    <a href="{{ url_for('products') }}" class="btn">Продукция >>></a>
+</div>
+{% endblock %}
