@@ -1,3 +1,4 @@
+[![Main TNGT workflow](https://github.com/Inswty/tngt_site/actions/workflows/main.yml/badge.svg)](https://github.com/Inswty/tngt_site/actions/workflows/main.yml)
 # TNGT Site
 Сайт компании TNGT – производитель оборудования для добычи нефти и газа. 
 Предназначен для презентации продукции, контактов и корпоративной информации.
