@@ -45,7 +45,7 @@ def create_app():
         return models.User.query.get(int(user_id))
 
     # Создаём заглушку SiteInfo, если нет ни одной записи
-    with app.app_context():
+    """with app.app_context():
         if models.SiteInfo.query.count() == 0:
             db.session.add(
                 models.SiteInfo(
@@ -55,6 +55,6 @@ def create_app():
                     main_image='images/main.jpg'  # путь к заглушке
                 )
             )
-            db.session.commit()
+            db.session.commit()"""
 
     return app
