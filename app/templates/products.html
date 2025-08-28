@@ -17,7 +17,7 @@
                     <img src="{{ url_for('static', filename='image/' ~ product.thumbnail) }}" alt="{{ product.name }}">
                 {% endif %}
                 <div class="product-info">
-                    <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                    <a href="{{ url_for('main.product_detail', product_id=product.id) }}">{{ product.name }}</a>
                     <p>{{ product.short_description }}</p>
                 </div>
             </div>

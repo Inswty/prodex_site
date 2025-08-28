@@ -1,0 +1,14 @@
+volumes:
+  db_data:
+
+services:
+  web:
+    image: inswty/tngt_app # Качаем с Docker Hub
+    env_file: .env
+    volumes:
+      - .:/app       # монтируем проект, чтобы изменения отражались сразу
+      - db_data:/app/instance  # файл SQLite на volume, чтобы данные сохранялись
+    command: >
+      gunicorn --reload --bind 0.0.0.0:5000 "app:create_app()"
+    ports:
+      - 5000:80

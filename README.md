@@ -22,6 +22,15 @@ flask shell
 >>> from app.models import User
 >>> User.create_admin(email='admin@tngt.ru', password='your_password')
 ```
+flask shell
+
+from app import db
+from app.models import User
+
+admin = User(username="admin", is_admin=True)
+admin.set_password("secret123")
+db.session.add(admin)
+db.session.commit()
 
 ```
 Технологический стек:
