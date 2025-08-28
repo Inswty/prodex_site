@@ -8,4 +8,4 @@ COPY . .
 
 ENV FLASK_ENV=production
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "tngt_app.wsgi"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "tngt_site.wsgi"]
