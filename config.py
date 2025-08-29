@@ -12,4 +12,5 @@ class Config(object):
     UPLOAD_BASE_PATH = os.path.join(basedir, 'app', 'static', 'image')
     # URL-префикс для доступа к картинкам
     UPLOAD_URL_PREFIX = '/image/'
-    SERVER_NAME = 'tngt.duckdns.org'
+    if os.getenv('FLASK_ENV') == 'production':
+        SERVER_NAME = 'tngt.duckdns.org'

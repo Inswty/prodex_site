@@ -16,31 +16,26 @@
   - Категории продукции
   - Настройка главной страницы (текст, изображения)
   - Контакты компании
+```
 
-После первого запуска сайта можно создать администратора через консоль:
-```bash
-flask shell
->>> from app.models import User
->>> User.create_admin(email='admin@tngt.ru', password='your_password')
+```
+При деплое на сервер или в продакшен создается пользователь:
+'admin' пароль 'secret123', Не забудте сменить пароль в админке!!!
+
+
 ```
 flask shell
 
-from app import db
-from app.models import User
-
-admin = User(username="admin", is_admin=True)
-admin.set_password("secret123")
-db.session.add(admin)
-db.session.commit()
 
 ```
 Технологический стек:
 - Python 3.12
 - Flask
-- Flask-Babel
 - SQLAlchemy
-- SQLite/PostgreSQL
-- Docker
+- SQLite
+- Gunicorn
+- Docker / Docker Compose
+- GitHub Actions (CI/CD)
 ```
 
 Автор:
