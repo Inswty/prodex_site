@@ -7,13 +7,10 @@ flask db upgrade
 
 echo "Adding default SiteInfo if not exists..."
 python << EOF
-import logging
 from app import create_app, db
 from app.models import SiteInfo, User
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash
-
-logger = logging.getLogger(__name__)
 
 app = create_app()
 with app.app_context():
@@ -28,13 +25,9 @@ with app.app_context():
                 )
             )
             db.session.commit()
-            logger.info('SiteInfo - Добавлена Default запись')
-            print('Default SiteInfo added')
+            app.logger.info('SiteInfo - Добавлена Default запись')
         except SQLAlchemyError  as e:
-            logger.critical(f'SQLAlchemyError при попытке записи: {e}')
-            print('Error SiteInfo added')
-    else:
-        print('SiteInfo already exists')
+            app.logger.critical(f'SQLAlchemyError при попытке записи: {e}')
     # Создаем админ-пользователя
     admin_username = "admin"
     admin_password = "secret123"
@@ -48,13 +41,9 @@ with app.app_context():
                 )
             )
             db.session.commit()        
-            print(f'Default admin user "{admin_username}" created with password "{admin_password}", Please change password!!!')
-            logger.info(f'Создан admin-пользователь "{admin_username}", пароль: "{admin_password}". Измените пароль!!!')
+            app.logger.info(f'Создан admin-пользователь "{admin_username}", пароль: "{admin_password}". Измените пароль!!!')
         except SQLAlchemyError  as e:
-            logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
-            print('Error creating admin user')
-    else:
-        print('Admin user already exists')
+            app.logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
 EOF
 
 echo "Starting Gunicorn..."
