@@ -1,28 +1,50 @@
 
-from flask import redirect, url_for
+import logging
+
+from flask import flash, redirect, request, url_for
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import ImageUploadField
-from flask_login import current_user, logout_user
 from flask_admin import Admin, AdminIndexView, expose
+from flask_admin.menu import MenuLink
+from flask_login import current_user, logout_user
+from sqlalchemy import delete
 from wtforms import Form, StringField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length
-from flask_admin.menu import MenuLink
+
 from config import Config
-
-from .models import SiteInfo, Product, Category, User
 from . import db
+from .constants import PAGINATION_PAGE_SIZE
+from .models import Category, Log, SiteInfo, Product, User
+
+logger = logging.getLogger(__name__)
 
 
-class SecureModelView(ModelView):
-    """Доступ только для авторизованных админов."""
+class AdminSecurityMixin:
+    """Миксин для контроля доступа к админ-панели."""
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('main.login'))  # если нет доступа
+        logger.warning(
+            f'Попытка доступа к разделу "{name}". Пользователь: {current_user}'
+        )
+        return redirect(url_for('main.login'))
+
+
+class LogModelView (AdminSecurityMixin, ModelView):
+
+    def after_model_change(self, form, model, is_created):
+        """Логирование после изменения модели."""
+        action = 'создан' if is_created else 'обновлен'
+        logger.info(f'Модель {model.__class__.__name__} {action}: {model}')
+
+    def after_model_delete(self, model):
+        """Логирование после удаления модели."""
+        logger.warning(f'Модель {model.__class__.__name__} удалена: {model}')
 
 
 def create_image_field(label, description=''):
+    """Создает поле загрузки изображения для формы админки."""
     return ImageUploadField(
         label,
         base_path=Config.UPLOAD_BASE_PATH,
@@ -31,7 +53,8 @@ def create_image_field(label, description=''):
     )
 
 
-class SiteInfoAdmin(SecureModelView):
+class SiteInfoAdmin(LogModelView):
+    """Админка для управления информацией о сайте."""
     can_create = False  # отключает кнопку 'Create'
     can_delete = False  # отключает кнопку 'Delete'
     column_list = ['company_name', 'email', 'phone']
@@ -59,7 +82,8 @@ class SiteInfoAdmin(SecureModelView):
     }
 
 
-class ProductAdmin(SecureModelView):
+class ProductAdmin(LogModelView):
+    """Админка для управления продуктами."""
     column_list = ['name', 'category', 'short_description']
     column_labels = {
         'name': 'Название',
@@ -102,13 +126,15 @@ class ProductAdmin(SecureModelView):
     }
 
 
-class CategoryAdmin(SecureModelView):
+class CategoryAdmin(LogModelView):
+    """Админка для управления категориями продуктов."""
     column_list = ['name']
     form_excluded_columns = ['products']  # Скрыть обратную связь
     column_labels = {'name': 'Название категории'}
 
 
-class UserAdmin(SecureModelView):
+class UserAdmin(LogModelView):
+    """Админка для управления пользователями."""
     class UserForm(Form):
         username = StringField('Username', validators=[DataRequired()])
         is_admin = BooleanField('Is Admin')
@@ -123,12 +149,42 @@ class UserAdmin(SecureModelView):
             model.set_password(form.new_password.data)
 
 
-class MyAdminIndexView(AdminIndexView):
+class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):
+    """Главная страница админки с отображением логов."""
+
     @expose('/')
     def index(self):
-        if not current_user.is_authenticated or not current_user.is_admin:
-            return redirect(url_for('main.login'))
-        return super().index()
+        # Пагинация
+        page = request.args.get('page', 1, type=int)
+        per_page = PAGINATION_PAGE_SIZE
+
+        # Получаем логи с пагинацией
+        logs_pagination = Log.query.order_by(Log.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        logs = logs_pagination.items
+
+        return self.render('admin/index.html',
+                           logs=logs,
+                           pagination=logs_pagination)
+
+    @expose('/clear-logs', methods=['POST'])
+    def clear_logs(self):
+        """Очистка всех логов из БД."""
+        try:
+            # Удаляем все логи
+            db.session.execute(delete(Log))
+            db.session.commit()
+
+            flash('Все логи успешно очищены', 'success')
+            logger.info(f'Логи очищены пользователем: {current_user.username}')
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Ошибка при очистке логов: {e}', 'error')
+            logger.error(f'Ошибка очистки логов: {e}')
+
+        return redirect(url_for('admin.index'))
 
     @expose('/logout')
     def logout(self):
@@ -136,11 +192,28 @@ class MyAdminIndexView(AdminIndexView):
         return redirect(url_for('main.login'))
 
 
+# Создаем админку с кастомной главной страницей
 admin = Admin(
     name='TNGT-Admin',
     template_mode='bootstrap4',
-    index_view=MyAdminIndexView()
+    index_view=LogsAdminIndexView(name='Logs')  # Переименовываем в "Logs"
 )
+
+
+class LogEntryAdmin(LogModelView):
+    """Админка для просмотра логов."""
+    column_list = ('created_at', 'level', 'message', 'logger_name')
+    column_filters = ('level', 'created_at')
+    can_create = False
+    can_edit = False
+    can_delete = True
+    column_searchable_list = ('message',)
+    column_labels = {
+        'created_at': 'Дата/Время',
+        'level': 'Уровень',
+        'message': 'Сообщение',
+        'logger_name': 'Логгер'
+    }
 
 
 def init_admin(app):

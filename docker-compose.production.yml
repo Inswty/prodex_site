@@ -6,6 +6,6 @@ services:
     image: inswty/tngt_site # Качаем с Docker Hub
     env_file: .env
     volumes:
-      - db_data:/app/instance  # файл SQLite на volume, чтобы данные сохранялись
+      - db_data:/app/instance  # SQLite на volume
     ports:
       - 5000:5000
