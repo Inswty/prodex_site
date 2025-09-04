@@ -1,6 +1,11 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from http import HTTPStatus
+
+from flask import (
+    abort, Blueprint, flash, redirect, render_template, request, url_for
+)
 from flask_login import login_user, logout_user
 
+from .exceptions import ProductNotFound
 from .models import Category, Product, SiteInfo, User
 
 bp = Blueprint('main', __name__)
@@ -43,10 +48,15 @@ def products():
 
 @bp.route('/product/<int:product_id>')
 def product_detail(product_id):
+    try:
+        product = Product.get_by_id(product_id)
+    except ProductNotFound:
+        abort(HTTPStatus.NOT_FOUND)
+
     return render_template(
         'product_detail.html',
         site=SiteInfo.get(),
-        product=Product.get_by_id(product_id)
+        product=product
     )
 
 

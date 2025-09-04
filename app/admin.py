@@ -2,9 +2,9 @@
 import logging
 
 from flask import flash, redirect, request, url_for
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import ImageUploadField
-from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 from flask_login import current_user, logout_user
 from sqlalchemy import delete
@@ -13,7 +13,11 @@ from wtforms.validators import DataRequired, Length
 
 from config import Config
 from . import db
-from .constants import PAGINATION_PAGE_SIZE
+from .constants import (
+    PAGINATION_PAGE_SIZE, MAIN_PAGE_TEXT_ROW_HEIGHT, ABOUT_ROW_HEIGHT,
+    CATEGORY_AJAX_PAGE_SIZE, CATEGORY_AJAX_MIN_INPUT_LENGTH,
+    PRODUCT_DESCRIPTION_ROW_HEIGHT
+)
 from .models import Category, Log, SiteInfo, Product, User
 
 logger = logging.getLogger(__name__)
@@ -21,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 class AdminSecurityMixin:
     """Миксин для контроля доступа к админ-панели."""
+
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin
 
@@ -55,10 +60,10 @@ def create_image_field(label, description=''):
 
 class SiteInfoAdmin(LogModelView):
     """Админка для управления информацией о сайте."""
+
     can_create = False  # отключает кнопку 'Create'
     can_delete = False  # отключает кнопку 'Delete'
     column_list = ['company_name', 'email', 'phone']
-    # Русификация заголовков
     column_labels = {
         'company_name': 'Наименование',
         'main_page_text': 'Текст на главной',
@@ -71,10 +76,10 @@ class SiteInfoAdmin(LogModelView):
     }
     form_widget_args = {
         'main_page_text': {
-            'rows': 15,  # Высота в строках
+            'rows': MAIN_PAGE_TEXT_ROW_HEIGHT,  # Высота в строках
         },
         'about': {
-            'rows': 7,
+            'rows': ABOUT_ROW_HEIGHT,
         }
     }
     form_extra_fields = {
@@ -84,6 +89,7 @@ class SiteInfoAdmin(LogModelView):
 
 class ProductAdmin(LogModelView):
     """Админка для управления продуктами."""
+
     column_list = ['name', 'category', 'short_description']
     column_labels = {
         'name': 'Название',
@@ -101,13 +107,13 @@ class ProductAdmin(LogModelView):
     form_ajax_refs = {
         'category': {
             'fields': ['name'],
-            'page_size': 10,
-            'minimum_input_length': 0  # Показывать все сразу
+            'page_size': CATEGORY_AJAX_PAGE_SIZE,
+            'minimum_input_length': CATEGORY_AJAX_MIN_INPUT_LENGTH
         }
     }
     form_widget_args = {
         'description': {
-            'rows': 15,
+            'rows': PRODUCT_DESCRIPTION_ROW_HEIGHT,
         }
     }
     form_extra_fields = {
@@ -128,6 +134,7 @@ class ProductAdmin(LogModelView):
 
 class CategoryAdmin(LogModelView):
     """Админка для управления категориями продуктов."""
+
     column_list = ['name']
     form_excluded_columns = ['products']  # Скрыть обратную связь
     column_labels = {'name': 'Название категории'}
@@ -135,6 +142,7 @@ class CategoryAdmin(LogModelView):
 
 class UserAdmin(LogModelView):
     """Админка для управления пользователями."""
+
     class UserForm(Form):
         username = StringField('Username', validators=[DataRequired()])
         is_admin = BooleanField('Is Admin')
@@ -202,6 +210,7 @@ admin = Admin(
 
 class LogEntryAdmin(LogModelView):
     """Админка для просмотра логов."""
+
     column_list = ('created_at', 'level', 'message', 'logger_name')
     column_filters = ('level', 'created_at')
     can_create = False
