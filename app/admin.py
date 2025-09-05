@@ -1,7 +1,7 @@
-
 import logging
+from http import HTTPStatus
 
-from flask import flash, redirect, request, url_for
+from flask import abort, flash, redirect, request, url_for
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import ImageUploadField
@@ -33,19 +33,21 @@ class AdminSecurityMixin:
         logger.warning(
             f'Попытка доступа к разделу "{name}". Пользователь: {current_user}'
         )
-        return redirect(url_for('main.login'))
+        if not current_user.is_authenticated:
+            return redirect(url_for('main.login'))
+        return abort(HTTPStatus.FORBIDDEN)
 
 
 class LogModelView (AdminSecurityMixin, ModelView):
 
     def after_model_change(self, form, model, is_created):
         """Логирование после изменения модели."""
-        action = 'создан' if is_created else 'обновлен'
-        logger.info(f'Модель {model.__class__.__name__} {action}: {model}')
+        action = 'создана' if is_created else 'обновлена'
+        logger.info(f'Запись в {model.__class__.__name__} {action}: {model}')
 
     def after_model_delete(self, model):
         """Логирование после удаления модели."""
-        logger.warning(f'Модель {model.__class__.__name__} удалена: {model}')
+        logger.warning(f'Запись в {model.__class__.__name__} удалена: {model}')
 
 
 def create_image_field(label, description=''):
