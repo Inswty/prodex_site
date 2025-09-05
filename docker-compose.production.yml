@@ -3,7 +3,7 @@ volumes:
 
 services:
   web:
-    image: inswty/tngt_site # Качаем с Docker Hub
+    image: inswty/tngt-site # Качаем с Docker Hub
     env_file: .env
     volumes:
       - db_data:/app/instance  # SQLite на volume

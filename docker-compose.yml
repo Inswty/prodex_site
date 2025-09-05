@@ -5,7 +5,7 @@ services:
   web:
     build: .
     env_file: .env
-    container_name: tngt_site
+    container_name: tngt-site
     volumes:
       - .:/app       # монтируем проект, чтобы изменения отражались сразу
       - db_data:/app/instance  # файл SQLite на volume, чтобы данные сохранялись

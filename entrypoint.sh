@@ -45,9 +45,9 @@ with app.app_context():
         except SQLAlchemyError  as e:
             app.logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
 EOF
-# Если файла нет в volume media, копируем из app/media
+# Если Default-image нет в volume, копируем из app/media
 if [ ! -f /app/media/main.jpg ]; then
-    cp /app/media/main.jpg /app/media/main.jpg
+    cp /app/static/media/main.jpg /app/media/main.jpg
     echo "Файл main.jpg скопирован в media"
 else
     echo "Файл main.jpg уже существует в media"
