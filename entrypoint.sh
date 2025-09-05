@@ -45,7 +45,13 @@ with app.app_context():
         except SQLAlchemyError  as e:
             app.logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
 EOF
-
+# Если файла нет в volume media, копируем из app/media
+if [ ! -f /app/media/main.jpg ]; then
+    cp /app/media/main.jpg /app/media/main.jpg
+    echo "Файл main.jpg скопирован в media"
+else
+    echo "Файл main.jpg уже существует в media"
+fi
 echo "Starting Gunicorn..."
 if [ "$FLASK_ENV" = "development" ] || [ "$FLASK_DEBUG" = "1" ]; then
     exec gunicorn --workers 1 --reload --bind 0.0.0.0:5000 --log-level debug "app:create_app()"
