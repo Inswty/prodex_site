@@ -9,3 +9,10 @@ services:
       - db_data:/app/instance  # SQLite на volume
     ports:
       - 5000:5000
+
+  backend:
+    image: tngt_site:latest
+    volumes:
+      - /var/www/tngt/static:/app/static:ro  # статика для Nginx
+    ports:
+      - "5001:5000"
