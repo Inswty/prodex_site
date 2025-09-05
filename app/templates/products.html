@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="main-banner">
-    <img src="{{ url_for('static', filename='image/' ~ site.main_image) }}">
+    <img src="{{ url_for('main.media', filename=site.main_image) }}">
 </div>
 <div class="breadcrumb">
     Главная > Продукция
@@ -14,7 +14,7 @@
         {% for product in category.products %}
             <div class="product-item">
                 {% if product.thumbnail %}
-                    <img src="{{ url_for('static', filename='image/' ~ product.thumbnail) }}" alt="{{ product.name }}">
+                    <img src="{{ url_for('main.media', filename=product.thumbnail) }}" alt="{{ product.name }}">
                 {% endif %}
                 <div class="product-info">
                     <a href="{{ url_for('main.product_detail', product_id=product.id) }}">{{ product.name }}</a>

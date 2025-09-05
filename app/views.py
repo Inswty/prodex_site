@@ -1,7 +1,8 @@
 from http import HTTPStatus
 
 from flask import (
-    abort, Blueprint, flash, redirect, render_template, request, url_for
+    abort, Blueprint, current_app, flash, redirect, render_template, request,
+    send_from_directory, url_for
 )
 from flask_login import login_user, logout_user
 
@@ -23,7 +24,7 @@ def login():
             return redirect(next_page or url_for('admin.index'))
         else:
             flash('Неверный логин или пароль', 'error')
-    return render_template('login.html')
+    return render_template('admin/login.html')
 
 
 @bp.route('/logout')
@@ -68,3 +69,10 @@ def about():
 @bp.route('/contacts')
 def contacts():
     return render_template('contacts.html', site=SiteInfo.get())
+
+
+@bp.route('/media/<path:filename>')
+def media(filename):
+    return send_from_directory(
+        current_app.config['UPLOAD_BASE_PATH'], filename
+    )

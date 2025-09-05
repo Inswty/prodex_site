@@ -55,7 +55,7 @@ def create_image_field(label, description=''):
     return ImageUploadField(
         label,
         base_path=Config.UPLOAD_BASE_PATH,
-        url_relative_path=Config.UPLOAD_URL_PREFIX,
+        endpoint='main.media',
         description=description
     )
 

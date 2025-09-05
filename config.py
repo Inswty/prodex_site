@@ -9,7 +9,7 @@ class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY')
     TIMEZONE = 'Europe/Moscow'
 
-    UPLOAD_BASE_PATH = os.path.join(basedir, 'app', 'instance', 'media')
+    UPLOAD_BASE_PATH = os.path.join(basedir, 'instance', 'media')
     UPLOAD_URL_PREFIX = '/media/'
 
     if os.getenv('FLASK_ENV') == 'production':

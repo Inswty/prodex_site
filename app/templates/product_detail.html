@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="main-banner">
-    <img src="{{ url_for('static', filename='image/' ~ product.header_image) }}">
+    <img src="{{ url_for('main.media', filename=product.header_image) }}">
 </div>
 
 <div class="main-text">
