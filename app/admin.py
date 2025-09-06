@@ -31,7 +31,9 @@ class AdminSecurityMixin:
 
     def inaccessible_callback(self, name, **kwargs):
         logger.warning(
-            f'Попытка доступа к разделу "{name}". Пользователь: {current_user}'
+            'Попытка доступа к разделу "%s". Пользователь: %s',
+            name,
+            current_user
         )
         if not current_user.is_authenticated:
             return redirect(url_for('main.login'))
@@ -42,12 +44,21 @@ class LogModelView (AdminSecurityMixin, ModelView):
 
     def after_model_change(self, form, model, is_created):
         """Логирование после изменения модели."""
-        action = 'создана' if is_created else 'обновлена'
-        logger.info(f'Запись в {model.__class__.__name__} {action}: {model}')
+        action = 'Создана' if is_created else 'Обновлена'
+        logger.info(
+            '%s запись в %s : %s',
+            action,
+            model.__class__.__name__,
+            model
+        )
 
     def after_model_delete(self, model):
         """Логирование после удаления модели."""
-        logger.warning(f'Запись в {model.__class__.__name__} удалена: {model}')
+        logger.warning(
+            'Запись %s удалена из: %s',
+            model,
+            model.__class__.__name__
+        )
 
 
 def create_image_field(label, description=''):
@@ -141,6 +152,17 @@ class CategoryAdmin(LogModelView):
     form_excluded_columns = ['products']  # Скрыть обратную связь
     column_labels = {'name': 'Название категории'}
 
+    # запрет на удаление категорий с товарами
+    def delete_model(self, model):
+        if model.products:  # relationship с Product
+            logger.warning(
+                'Попытка удалить категорию с id=%s, в которой есть товары',
+                model.id
+            )
+            flash('Нельзя удалить категорию, пока в ней есть товары', 'error')
+            return False  # удаление не происходит
+        return super().delete_model(model)
+
 
 class UserAdmin(LogModelView):
     """Админка для управления пользователями."""
@@ -187,13 +209,14 @@ class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):
             db.session.commit()
 
             flash('Все логи успешно очищены', 'success')
-            logger.info(f'Логи очищены пользователем: {current_user.username}')
-
+            logger.info(
+                'Логи очищены пользователем: %s',
+                current_user.username
+            )
         except Exception as e:
             db.session.rollback()
             flash(f'Ошибка при очистке логов: {e}', 'error')
-            logger.error(f'Ошибка очистки логов: {e}')
-
+            logger.error('Ошибка очистки логов: %s', e)
         return redirect(url_for('admin.index'))
 
     @expose('/logout')
@@ -204,7 +227,7 @@ class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):
 
 # Создаем админку с кастомной главной страницей
 admin = Admin(
-    name='TNGT-Admin',
+    name='Prodex-Admin',
     template_mode='bootstrap4',
     index_view=LogsAdminIndexView(name='Logs')  # Переименовываем в "Logs"
 )

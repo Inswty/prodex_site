@@ -3,10 +3,10 @@ volumes:
 
 services:
   web:
-    image: inswty/tngt-site # Качаем с Docker Hub
+    image: inswty/prodex_site # Качаем с Docker Hub
     env_file: .env
     volumes:
       - db_data:/app/instance  # SQLite на volume
-      - /var/www/tngt/static:/app/static:ro  # статика для Nginx
+      - /var/www/prodex/static:/app/static:ro  # статика для Nginx
     ports:
       - 5000:5000

@@ -1,7 +1,6 @@
 [![Main TNGT workflow](https://github.com/Inswty/tngt_site/actions/workflows/main.yml/badge.svg)](https://github.com/Inswty/tngt_site/actions/workflows/main.yml)
-## TNGT Site
-Сайт компании **TNGT** – производитель оборудования для добычи нефти и газа. 
-Предназначен для презентации продукции, контактов и корпоративной информации.
+## Prodex Site
+Prodex Site — это корпоративное веб-решение, предназначенное для производственных компаний с небольшим ассортиментом продукции. Проект включает публичный сайт-визитку и CMS-панель для самостоятельного управления контентом.
 
 ## Технологический стек:
 - Python 3.12
@@ -13,20 +12,20 @@
 - GitHub Actions (CI/CD)
 
 ## Hosted Version
-[https://](https://)
+[![Website](https://img.shields.io/badge/Visit-Live%20Site-brightgreen)](https://)
 
 ## Как запустить:
 ### Локально:
 - Клонируйте репозиторий, установите зависимости, запустите приложение:
 ```bash
-git clone git@github.com:Inswty/tngt_site.git
+git clone git@github.com:Inswty/prodex_site.git
 pip install -r requirements.txt
 flask run
 ``` 
 Приложение доступно по адресу:  
 [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
-## Докер
+### Докер:
 Если в вашей системе установлен Docker, в корневом каталоге выполните:
 
 docker-compose up -d --build
