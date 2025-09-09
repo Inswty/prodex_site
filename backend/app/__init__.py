@@ -39,6 +39,9 @@ def create_app():
     from .views import bp as main_bp
     app.register_blueprint(main_bp)
 
+    from .sitemap import bp as sitemap_bp
+    app.register_blueprint(sitemap_bp)
+
     # Импорт моделей и админки
     from . import models
     from .admin import init_admin

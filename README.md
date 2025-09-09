@@ -7,6 +7,7 @@ ProdexSite — это корпоративное веб-решение, пред
 - Flask
 - SQLAlchemy
 - SQLite
+- Nginx
 - Gunicorn
 - Docker / Docker Compose
 - GitHub Actions (CI/CD)

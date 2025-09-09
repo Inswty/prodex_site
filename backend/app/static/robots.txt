@@ -1,4 +1,12 @@
 User-agent: *
+Allow: /static/
+Allow: /media/
+Allow: /admin/login/
+Allow: /admin/logout/
 Disallow: /admin/
+Disallow: /instance/
+Disallow: /app/
 Disallow: /api/
-Allow: /
+Crawl-delay: 2
+
+Sitemap: https://tngt.duckdns.org/sitemap.xml
