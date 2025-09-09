@@ -11,3 +11,4 @@
    migrations
  per-file-ignores =
    __init__.py: F401, E402
+   sitemap.py: E221, E222
