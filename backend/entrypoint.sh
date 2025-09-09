@@ -45,15 +45,12 @@ with app.app_context():
         except SQLAlchemyError  as e:
             app.logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
 EOF
-# Создаем директорию media в instance если не существует
-mkdir -p /app/instance/media
-
-# Копируем файл в instance/media
-if [ ! -f /app/instance/media/main.jpg ]; then
-    cp /app/app/static/media/main.jpg /app/instance/media/main.jpg
-    echo "Файл main.jpg скопирован в instance/media"
+# Копируем default main_image в /media
+if [ ! -f /app/media/main.jpg ]; then
+    cp /app/app/static/media/main.jpg /app/media/main.jpg
+    echo "Файл main.jpg скопирован в /media"
 else
-    echo "Файл main.jpg уже существует в instance/media"
+    echo "Файл main.jpg уже существует в /media"
 fi
 echo "Starting Gunicorn..."
 if [ "$FLASK_ENV" = "development" ] || [ "$FLASK_DEBUG" = "1" ]; then

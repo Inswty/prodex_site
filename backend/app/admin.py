@@ -157,7 +157,7 @@ class CategoryAdmin(LogModelView):
         if model.products:  # relationship с Product
             logger.warning(
                 'Попытка удалить категорию с id=%s, в которой есть товары',
-                model.id
+                model.name
             )
             flash('Нельзя удалить категорию, пока в ней есть товары', 'error')
             return False  # удаление не происходит
@@ -210,7 +210,7 @@ class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):
 
             flash('Все логи успешно очищены', 'success')
             logger.info(
-                'Логи очищены пользователем: %s',
+                'Логи удалены пользователем: %s',
                 current_user.username
             )
         except Exception as e:

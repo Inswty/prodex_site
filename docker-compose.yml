@@ -1,13 +1,24 @@
 volumes:
   db_data:
+  static:
+  media:
 
 services:
-  web:
-    build: .
+  backend:
+    build: ./backend/
     env_file: .env
     container_name: prodex_site
     volumes:
-      - .:/app       # монтируем проект, чтобы изменения отражались сразу
-      - db_data:/app/instance  # файл SQLite на volume, чтобы данные сохранялись
-    ports:
-      - 5000:5000
+      - db_data:/app/instance
+      - media:/app/media
+      - static:/app/app/static
+  gateway:
+      build: ./nginx/
+      env_file: .env
+      volumes:
+        - static:/usr/share/nginx/html
+        - media:/media/ 
+      depends_on:
+        - backend
+      ports:
+        - 5000:80
