@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 
 @bp.app_errorhandler(HTTPStatus.NOT_FOUND)
 def page_not_found(error):
-    logger.warning(f'404 ошибка: {request.url}')
+    logger.warning('404 ошибка: %s', request.url)
     return render_template('errors/404.html'), HTTPStatus.NOT_FOUND
 
 
 @bp.app_errorhandler(HTTPStatus.INTERNAL_SERVER_ERROR)
 def internal_error(error):
     db.session.rollback()
-    logger.error(f'500 ошибка: {error}', exc_info=True)
+    logger.error('500 ошибка: %s', error, exc_info=True)
     return render_template('errors/500.html'), HTTPStatus.INTERNAL_SERVER_ERROR

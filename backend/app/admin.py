@@ -1,4 +1,6 @@
 import logging
+import os
+import uuid
 from http import HTTPStatus
 
 from flask import abort, flash, redirect, request, url_for
@@ -62,12 +64,20 @@ class LogModelView (AdminSecurityMixin, ModelView):
 
 
 def create_image_field(label, description=''):
-    """Создает поле загрузки изображения для формы админки."""
+    """Создает поле загрузки изображения с уникальным именем файла."""
+
+    def namegen(obj, file_data):
+        # Получаем расширение исходного файла
+        ext = os.path.splitext(file_data.filename)[1]
+        # Генерируем уникальное имя через UUID
+        return f'{uuid.uuid4().hex}{ext}'
+
     return ImageUploadField(
         label,
         base_path=Config.UPLOAD_BASE_PATH,
         endpoint='main.media',
-        description=description
+        description=description,
+        namegen=namegen
     )
 
 
@@ -229,7 +239,7 @@ class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):
 admin = Admin(
     name='Prodex-Admin',
     template_mode='bootstrap4',
-    index_view=LogsAdminIndexView(name='Logs')  # Переименовываем в "Logs"
+    index_view=LogsAdminIndexView(name='Logs')  # Переименовываем в 'Logs'
 )
 
 

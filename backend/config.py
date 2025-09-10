@@ -10,8 +10,7 @@ class Config(object):
     TIMEZONE = 'Europe/Moscow'
 
     UPLOAD_BASE_PATH = '/app/media'
-    #UPLOAD_BASE_PATH = os.path.join(basedir, 'instance', 'media')
     UPLOAD_URL_PREFIX = '/media/'
 
     if os.getenv('FLASK_ENV') == 'production':
-        SERVER_NAME = 'tngt.duckdns.org'
+        SERVER_NAME = os.getenv('SERVER_NAME')

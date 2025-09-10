@@ -54,7 +54,7 @@ else
 fi
 echo "Starting Gunicorn..."
 if [ "$FLASK_ENV" = "development" ] || [ "$FLASK_DEBUG" = "1" ]; then
-    exec gunicorn --workers 1 --reload --bind 0.0.0.0:5000 --log-level debug "app:create_app()"
+    exec gunicorn --workers 1 --reload --bind 0.0.0.0:5000 --log-level error "app:create_app()"
 else
-    exec gunicorn --workers 1 --bind 0.0.0.0:5000 --log-level debug "app:create_app()"
+    exec gunicorn --workers 1 --bind 0.0.0.0:5000 --log-level error "app:create_app()"
 fi

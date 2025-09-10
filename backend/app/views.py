@@ -12,7 +12,7 @@ from .models import Category, Product, SiteInfo, User
 bp = Blueprint('main', __name__)
 
 
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']

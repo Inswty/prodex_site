@@ -18,12 +18,23 @@ ProdexSite — это корпоративное веб-решение, пред
 
 ## Как запустить:
 ### Локально:
-- Клонируйте репозиторий, установите зависимости, запустите приложение:
+- Клонируйте репозиторий, установите зависимости:
 ```bash
 git clone git@github.com:Inswty/prodex_site.git
 pip install -r requirements.txt
-flask run
 ``` 
+- Создайте и заполните .env файл:
+```env
+FLASK_APP=app
+FLASK_ENV=development
+FLASK_DEBUG=1
+DATABASE_URI=sqlite:///db.sqlite3
+SECRET_KEY=<YOUR_SECRET_KEY>
+```
+Запустите приложение:
+```bash
+flask run
+```
 Приложение доступно по адресу:  
 [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
@@ -35,25 +46,24 @@ docker-compose up -d --build
 Приложение будет запущено по адресу [http://localhost:5000](http://localhost:5000)
 
 ### Деплой в продакшен:
-- Создать и заполнить .env файл, скопировать на сервер в директорию проекта:
-  Пример содержимого:
+- Cкопировать файл .env на сервер в директорию проекта. Пример содержимого:
 ```env
-  FLASK_APP=app
-  FLASK_ENV=production
-  FLASK_DEBUG=0
-  DATABASE_URI=sqlite:///db.sqlite3
-  SECRET_KEY=<YOUR_SECRET_KEY>
+FLASK_ENV=production
+FLASK_DEBUG=0
+DATABASE_URI=sqlite:///db.sqlite3
+SECRET_KEY=<YOUR_SECRET_KEY>
+SERVER_NAME=<YOUR_SERVER_NAME>
 ```
 - Создать SECRETS в GitHub Actions:
 ```
-  DOCKER_PASSWORD
-  DOCKER_USERNAME
-  HOST
-  SSH_KEY
-  USER
-  SSH_PASSPHRASE
-  TELEGRAM_TO
-  TELEGRAM_TOKEN
+DOCKER_PASSWORD
+DOCKER_USERNAME
+HOST
+SSH_KEY
+USER
+SSH_PASSPHRASE
+TELEGRAM_TO
+TELEGRAM_TOKEN
 ```
 - Выполнить пуш GitHub в ветку main:
 ```bash
