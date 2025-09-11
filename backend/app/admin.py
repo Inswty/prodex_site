@@ -48,7 +48,7 @@ class LogModelView (AdminSecurityMixin, ModelView):
         """Логирование после изменения модели."""
         action = 'Создана' if is_created else 'Обновлена'
         logger.info(
-            '%s запись в %s : %s',
+            '%s запись в %s: %s',
             action,
             model.__class__.__name__,
             model
@@ -166,7 +166,7 @@ class CategoryAdmin(LogModelView):
     def delete_model(self, model):
         if model.products:  # relationship с Product
             logger.warning(
-                'Попытка удалить категорию с id=%s, в которой есть товары',
+                'Попытка удалить категорию %s, в которой есть товары',
                 model.name
             )
             flash('Нельзя удалить категорию, пока в ней есть товары', 'error')

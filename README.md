@@ -1,7 +1,12 @@
 [![Prodex workflow](https://github.com/Inswty/prodex_site/actions/workflows/main.yml/badge.svg)](https://github.com/Inswty/prodex_site/actions/workflows/main.yml)
 [![Website](https://img.shields.io/badge/Visit-Live%20Site-brightgreen)](https://)
 ## ProdexSite
-ProdexSite — это корпоративное веб-решение, предназначенное для производственных компаний с небольшим ассортиментом продукции. Проект включает публичный сайт-визитку и CMS-панель для самостоятельного управления контентом.
+ProdexSite — корпоративное веб-решение для производственных компаний с небольшим ассортиментом продукции. Проект включает:
+
+- Страницы с информацией о компании  
+- Перечень продукции с описанием
+- Контакты и форма для обратной связи  
+- CMS-панель для самостоятельного управления контентом
 
 ## Технологический стек:
 - Python 3.12

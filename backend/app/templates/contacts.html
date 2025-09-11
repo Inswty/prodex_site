@@ -4,7 +4,10 @@
 <div class="main-banner">
     <img src="{{ url_for('main.media', filename=site.main_image) }}">
 </div>
+
 <div class="container header-container">
+
+    <!-- Контакты -->
     <div class="contacts">
         <ul class="contact-list">
             {% if site.phone %}
@@ -24,5 +27,30 @@
             {% endif %}
         </ul>
     </div>
+
+    <!-- Форма обратной связи -->
+    <div class="contact-form">
+        <h2>Свяжитесь с нами</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+              {% for category, msg in messages %}
+                <li class="{{ category }}">{{ msg }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <p>{{ form.name.label }}<br>{{ form.name(size=32, class="form-input") }}</p>
+            <p>{{ form.email.label }}<br>{{ form.email(size=32, class="form-input") }}</p>
+            <p>{{ form.phone.label }}<br>{{ form.phone(size=32, class="form-input") }}</p>
+            <p>{{ form.message.label }}<br>{{ form.message(rows=5, cols=32, class="form-textarea") }}</p>
+            <p>{{ form.submit(class="btn-submit") }}</p>
+        </form>
+    </div>
+
 </div>
 {% endblock %}

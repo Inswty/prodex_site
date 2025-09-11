@@ -41,7 +41,7 @@ with app.app_context():
                 )
             )
             db.session.commit()        
-            app.logger.info(f'Создан admin-пользователь "{admin_username}", пароль: "{admin_password}". Измените пароль!!!')
+            app.logger.info(f'Создан admin-пользователь: "{admin_username}", пароль: "{admin_password}". Измените пароль!!!')
         except SQLAlchemyError  as e:
             app.logger.critical(f'SQLAlchemyError при попытке создания пользователя: {e}')
 EOF
