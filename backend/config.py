@@ -16,9 +16,10 @@ class Config(object):
         SERVER_NAME = os.getenv('SERVER_NAME')
 
     # Настройки почты
-    MAIL_SERVER = 'smtp.yandex.ru'
-    MAIL_PORT = 587     # 465 (SSL)
-    MAIL_USE_TLS = True
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = os.getenv('MAIL_PORT')
+    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL')
+    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')  # твой email
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')  # пароль приложения Gmail
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_USERNAME')

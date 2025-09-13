@@ -9,7 +9,7 @@ services:
     env_file: .env
     container_name: prodex_site
     volumes:
-      #- .:/app  # Чтобы изменения отражались сразу
+      - ./backend/app:/app/app  # Чтобы изменения отражались сразу
       - db_data:/app/instance
       - media:/app/media
       - static:/app/app/static

@@ -6,6 +6,7 @@ from .models import db, Log
 
 class DBHandler(logging.Handler):
     """Лог-хендлер, сохраняет записи в базу данных."""
+
     def emit(self, record):
         log = Log(
             created_at=datetime.now(timezone.utc),

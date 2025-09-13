@@ -67,10 +67,14 @@ def create_image_field(label, description=''):
     """Создает поле загрузки изображения с уникальным именем файла."""
 
     def namegen(obj, file_data):
-        # Получаем расширение исходного файла
-        ext = os.path.splitext(file_data.filename)[1]
-        # Генерируем уникальное имя через UUID
-        return f'{uuid.uuid4().hex}{ext}'
+        try:
+            # Получаем расширение исходного файла
+            ext = os.path.splitext(file_data.filename)[1]
+            # Генерируем уникальное имя через UUID
+            return f'{uuid.uuid4().hex}{ext}'
+        except Exception as e:
+            logger.error('Ошибка генерации имени файла: %s', e)
+            return f'{uuid.uuid4().hex}'
 
     return ImageUploadField(
         label,
@@ -171,7 +175,12 @@ class CategoryAdmin(LogModelView):
             )
             flash('Нельзя удалить категорию, пока в ней есть товары', 'error')
             return False  # удаление не происходит
-        return super().delete_model(model)
+        try:
+            return super().delete_model(model)
+        except Exception as e:
+            logger.error('Ошибка при удалении категории %s: %s', model.name, e)
+            flash('Ошибка при удалении категории', 'error')
+            return False
 
 
 class UserAdmin(LogModelView):
@@ -187,8 +196,13 @@ class UserAdmin(LogModelView):
     column_list = ['username', 'is_admin']
 
     def on_model_change(self, form, model, is_created):
-        if form.new_password.data:
-            model.set_password(form.new_password.data)
+        try:
+            if form.new_password.data:
+                model.set_password(form.new_password.data)
+        except Exception as e:
+            logger.error('Ошибка при смене пароля у пользователя %s: %s',
+                         model.username, e)
+            raise
 
 
 class LogsAdminIndexView(AdminSecurityMixin, AdminIndexView):

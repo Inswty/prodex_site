@@ -31,10 +31,15 @@ pip install -r requirements.txt
 - Создайте и заполните .env файл:
 ```env
 FLASK_APP=app
-FLASK_ENV=development
 FLASK_DEBUG=1
 DATABASE_URI=sqlite:///db.sqlite3
 SECRET_KEY=<YOUR_SECRET_KEY>
+MAIL_SERVER = <YOUR_MAIL_SERVER>
+MAIL_PORT = <YOUR_MAIL_PORT>
+MAIL_USE_SSL = False
+MAIL_USE_TLS = True
+MAIL_USERNAME=<YOUR_EMAIL>
+MAIL_PASSWORD=<YOUR_MAIL_PASSWORD>
 ```
 Запустите приложение:
 ```bash
@@ -53,11 +58,16 @@ docker-compose up -d --build
 ### Деплой в продакшен:
 - Cкопировать файл .env на сервер в директорию проекта. Пример содержимого:
 ```env
-FLASK_ENV=production
 FLASK_DEBUG=0
 DATABASE_URI=sqlite:///db.sqlite3
 SECRET_KEY=<YOUR_SECRET_KEY>
 SERVER_NAME=<YOUR_SERVER_NAME>
+MAIL_SERVER = <YOUR_MAIL_SERVER>
+MAIL_PORT = <YOUR_MAIL_PORT>
+MAIL_USE_SSL = True
+MAIL_USE_TLS = False
+MAIL_USERNAME=<YOUR_EMAIL>
+MAIL_PASSWORD=<YOUR_MAIL_PASSWORD>
 ```
 - Создать SECRETS в GitHub Actions:
 ```
@@ -87,7 +97,7 @@ URL: '/admin'
   - Работа с пользователями
   - Журнал системных событий и ошибок
 
-![Скриншот](https://github.com/user-attachments/assets/270e83fd-2964-4a2d-adad-edcee70f7ca1)
+![Скриншот](https://github.com/user-attachments/assets/db3a126a-dcd4-4f86-897f-004982fc8c45)
 > [!WARNING]
 > При деплое в продакшен создается пользователь:
 > ```

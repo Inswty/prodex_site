@@ -4,6 +4,8 @@ from wtforms.validators import DataRequired, Email, Length
 
 
 class ContactForm(FlaskForm):
+    """Форма обратной связи."""
+
     name = StringField('Имя', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = StringField('Телефон', validators=[Length(max=30)])
